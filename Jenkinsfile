@@ -17,7 +17,6 @@ properties(
                         string(description: 'CCD Data Store Api url', defaultValue: 'http://ccd-data-store-api-saat.service.core-compute-saat.internal/', name: 'CCD_DATA_STORE_API_URL'),
                         string(description: 'Service auth url', defaultValue: 'http://betadevbccidams2slb.reform.hmcts.net', name: 'SERVICE_AUTH_PROVIDER_BASE_URL'),
                         string(description: 'Idam user auth url', defaultValue: 'http://betaDevbccidamAppLB.reform.hmcts.net', name: 'USER_AUTH_PROVIDER_OAUTH2_URL'),
-                        string(description: 'Evidence Management url', defaultValue: 'http://dm-store-saat.service.core-compute-saat.internal', name: 'EVIDENCE_MANAGEMENT_URL'),
                         string(description: 'Service auth service name', defaultValue: 'PROBATE_BACKEND', name: 'AUTHORISED_SERVICES'),
                         string(description: 'Idam user id', defaultValue: '22603', name: 'IDAM_USER_ID'),
                         string(description: 'Idam redirect url', defaultValue: 'https://ccd-case-management-web-saat.service.core-compute-saat.internal/oauth2redirect', name: 'IDAM_OAUTH2_REDIRECT_URI'),
