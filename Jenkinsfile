@@ -20,7 +20,8 @@ properties(
                         string(description: 'Evidence Management url', defaultValue: 'http://dm-store-saat.service.core-compute-saat.internal', name: 'EVIDENCE_MANAGEMENT_URL'),
                         string(description: 'Service auth service name', defaultValue: 'PROBATE_BACKEND', name: 'AUTHORISED_SERVICES'),
                         string(description: 'Idam user id', defaultValue: '22603', name: 'IDAM_USER_ID'),
-                        string(description: 'Idam redirect url', defaultValue: 'https://ccd-case-management-web-saat.service.core-compute-saat.internal/oauth2redirect', name: 'IDAM_OAUTH2_REDIRECT_URI')
+                        string(description: 'Idam redirect url', defaultValue: 'https://ccd-case-management-web-saat.service.core-compute-saat.internal/oauth2redirect', name: 'IDAM_OAUTH2_REDIRECT_URI'),
+                         string(description: 'env', defaultValue: 'saat', name: 'ENV')
 
                 ])
         ]
@@ -46,6 +47,7 @@ node {
         stage('Test') {
           env.CCD_DATA_STORE_API_URL = params.CCD_DATA_STORE_API_URL
           env.IDAM_OAUTH2_REDIRECT_URI =params.IDAM_OAUTH2_REDIRECT_URI
+          env.ENV=params.ENV
             sh "./gradlew clean build"
         }
 
