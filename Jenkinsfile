@@ -30,7 +30,7 @@ def packager = new Packager(this, 'probate')
 def versioner = new Versioner(this)
 
 def rpmTagger
-def app = "sol-ccd-services-integration-tests"
+def app = "pa-ccd-integration-tests"
 def artifactorySourceRepo = "probate-local"
 
 node {
@@ -42,14 +42,15 @@ node {
         }
 
         stage('Test') {
+          env.CCD_DATA_STORE_API_URL = params.CCD_DATA_STORE_API_URL
             sh "./gradlew clean build"
         }
 
         stage('Package (Docker)') {
             if ("master" == "${env.BRANCH_NAME}") {
-                dockerImage imageName: 'probate/sol-ccd-services-integration-tests', tags: ['master']
+                dockerImage imageName: 'probate/pa-ccd-integration-tests', tags: ['master']
             } else if ("master" == "${env.BRANCH_NAME}") {
-                dockerImage imageName: 'probate/sol-ccd-services-integration-tests'
+                dockerImage imageName: 'probate/pa-ccd-integration-tests'
             }
         }
 
@@ -67,7 +68,7 @@ node {
         publishHTML target: [
                 reportDir            : "${env.WORKSPACE}/target/site/serenity/",
                 reportFiles          : "index.html",
-                reportName           : "Sol CCD Integration Tests Report For Dev",
+                reportName           : "PA CCD Integration Tests Report",
                 alwaysLinkToLastBuild: true
         ]
     }

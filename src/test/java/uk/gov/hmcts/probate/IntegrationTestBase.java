@@ -21,7 +21,6 @@ public abstract class IntegrationTestBase {
     protected TestUtils utils;
 
     private String solCcdServiceUrl;
-    public static String evidenceManagementUrl;
 
     @Autowired
     public void solCcdServiceUrl(@Value("${ccd.data.store.api.url}") String solCcdServiceUrl) {
@@ -30,15 +29,6 @@ public abstract class IntegrationTestBase {
         System.out.println("base uri..." + RestAssured.baseURI);
     }
 
-    @Autowired
-    public void evidenceManagementUrl(@Value("${evidence.management.url}") String evidenceManagementUrl) {
-        this.evidenceManagementUrl = evidenceManagementUrl;
-
-    }
-
-    public static void setEvidenceManagementUrlAsBaseUri() {
-        RestAssured.baseURI = evidenceManagementUrl;
-    }
 
     @Rule
     public SpringIntegration springIntegration;
