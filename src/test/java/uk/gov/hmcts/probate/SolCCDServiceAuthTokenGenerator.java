@@ -87,11 +87,13 @@ public class SolCCDServiceAuthTokenGenerator {
                 .header("Content-Type", "application/json")
                 .body("{\"email\":\"" + idamUsername + "\", \"forename\":\"Test\",\"surname\":\"User\",\"password\":\"" + idamPassword + "\"}")
                 .post(idamCreateUrl());
+        System.out.println("in create useridam ");
     }
 
 
     public String generateUserTokenWithNoRoles() {
         createUserInIdam();
+        System.out.println("created user in idam");
         final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
         final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
                 ? redirectUri
@@ -102,6 +104,7 @@ public class SolCCDServiceAuthTokenGenerator {
                         redirectUriEnv)
                 .body()
                 .path("access-token");
+        System.out.println("token generated.."+token);
 
         userToken = "Bearer " + token;
         return userToken;
