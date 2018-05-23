@@ -6,7 +6,7 @@ import uk.gov.hmcts.Versioner
 
 def triggers = []
 if (env.BRANCH_NAME == "master") {
-    triggers << cron('H H(0-2) * * *') //build to trigger sometime between midnight and 2am every day
+    triggers << cron('H H(0-4) * * *') //build to trigger sometime between midnight and 2am every day
 }
 
 properties(
@@ -14,7 +14,7 @@ properties(
                 [$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/hmcts/Probate-PA-IntegrationTests.git'],
                 pipelineTriggers(triggers),
                 parameters([
-                        string(description: 'Sol ccd url', defaultValue: 'http://betaDevbprobateapp01.reform.hmcts.net:4104', name: 'SOL_CCD_SERVICE_BASE_URL'),
+                        string(description: 'CCD Data Store Api url', defaultValue: 'https://ccd-data-store-api-saat.service.core-compute-saat.internal/', name: 'CCD_DATA_STORE_API_URL'),
                         string(description: 'Service auth url', defaultValue: 'http://betadevbccidams2slb.reform.hmcts.net', name: 'SERVICE_AUTH_PROVIDER_BASE_URL'),
                         string(description: 'Idam user auth url', defaultValue: 'http://betaDevbccidamAppLB.reform.hmcts.net', name: 'USER_AUTH_PROVIDER_OAUTH2_URL'),
                         string(description: 'Evidence Management url', defaultValue: 'http://dm-store-saat.service.core-compute-saat.internal', name: 'EVIDENCE_MANAGEMENT_URL'),
