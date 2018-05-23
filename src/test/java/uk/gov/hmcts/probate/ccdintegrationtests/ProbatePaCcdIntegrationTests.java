@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.gov.hmcts.probate.IntegrationTestBase;
 
-
 @RunWith(SerenityRunner.class)
 public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
@@ -34,12 +33,6 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
     @Test
     public void validateFailureWithInvalidCCDCasePayload() {
 
-        token =
-                SerenityRest.given()
-                        .headers(utils.getHeadersWithUserId())
-                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
-                        .then().assertThat().statusCode(200).extract().path("token");
-
         String rep = utils.getJsonFromFile("failure.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"abc\"");
 
         SerenityRest.given()
@@ -48,6 +41,5 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
                 .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
                 .then().assertThat().statusCode(500);
     }
-
 
 }

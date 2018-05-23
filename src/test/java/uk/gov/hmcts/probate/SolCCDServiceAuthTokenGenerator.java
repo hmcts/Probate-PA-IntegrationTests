@@ -1,14 +1,22 @@
 package uk.gov.hmcts.probate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jwt.JWTParser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.probate.model.ClientAuthorizationCodeResponse;
 import uk.gov.hmcts.probate.model.ClientAuthorizationResponse;
+import uk.gov.hmcts.probate.util.TestUtils;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Base64;
+import java.util.Map;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.post;
@@ -35,69 +43,67 @@ public class SolCCDServiceAuthTokenGenerator {
     private String baseServiceOauth2Url;
     String clientToken;
 
+    private String idamUsername;
+
+    private String idamPassword;
+    @Value("${env}")
+    private String environment;
+
+    @Value("${user.auth.provider.oauth2.url}")
+    private String idamUserBaseUrl;
+
+    private String userToken;
+
+
+    private String idamCreateUrl() {
+        return idamUserBaseUrl + "/testing-support/accounts";
+    }
+
     public String generateServiceToken() {
         return "Bearer " + post(baseServiceAuthUrl + "/testing-support/lease?microservice={microservice}", serviceName)
                 .body().asString();
     }
 
     public String getUserId() {
-        clientToken = generateClientToken();
-
-        String withoutSignature = clientToken.substring(0, clientToken.lastIndexOf('.') + 1);
-        Claims claims = Jwts.parser().parseClaimsJwt(withoutSignature).getBody();
-
-        return claims.get("id", String.class);
-    }
-
-    private String generateClientToken() {
-        String code = generateClientCode();
-        String token = "";
-
-        String jsonResponse = post(baseServiceOauth2Url + "/oauth2/token?code=" + code +
-                "&client_secret=" + clientSecret +
-                "&client_id=" + clientId +
-                "&redirect_uri=" + redirectUri +
-                "&grant_type=authorization_code")
-                .body().asString();
-
-        ObjectMapper mapper = new ObjectMapper();
-
+        String jwt = userToken.replaceFirst("Bearer ", "");
+        Map<String, Object> claims;
         try {
-            token = mapper.readValue(jsonResponse, ClientAuthorizationResponse.class).accessToken;
-        } catch (IOException e) {
-            e.printStackTrace();
+            claims = JWTParser.parse(jwt).getJWTClaimsSet().getClaims();
+        } catch (ParseException e) {
+            throw new IllegalStateException("Cannot find user from authorization token ", e);
         }
+        String userid_local = (String) claims.get("id");
+        System.out.println("userid_local...." + userid_local);
+        return userid_local;
 
-        return token;
     }
 
-    private String generateClientCode() {
-        String code = "";
-        String jsonResponse = given()
-                .header("Authorization", "Basic dGVzdEBURVNULkNPTTpwYXNzd29yZA==")
-                .post(baseServiceOauth2Url + "/oauth2/authorize?response_type=code" +
-                        "&client_id=" + clientId +
-                        "&redirect_uri=" + redirectUri)
-                .asString();
 
-        ObjectMapper mapper = new ObjectMapper();
+    private void createUserInIdam() {
 
-        try {
-            code = mapper.readValue(jsonResponse, ClientAuthorizationCodeResponse.class).code;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return code;
+        idamUsername = "simulate-delivered" + UUID.randomUUID() + "@notifications.service.gov.uk";
+        idamPassword = UUID.randomUUID().toString();
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .body("{\"email\":\"" + idamUsername + "\", \"forename\":\"Test\",\"surname\":\"User\",\"password\":\"" + idamPassword + "\"}")
+                .post(idamCreateUrl());
     }
 
-    public String getUserToken(){
-       return "Bearer "+clientToken;
-    }
 
-    public void createNewUser() {
-        given().headers("Content-type", "application/json")
-                .body("{ \"email\":\"test@TEST.COM\", \"forename\":\"test@TEST.COM\",\"surname\":\"test@TEST.COM\",\"password\":\"123\",\"continue-url\":\"test\"}")
-                .post(baseServiceOauth2Url + "/testing-support/accounts");
+    public String generateUserTokenWithNoRoles() {
+        createUserInIdam();
+        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
+        final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
+                ? redirectUri
+                : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
+        final String token = RestAssured.given().baseUri(idamUserBaseUrl)
+                .header("Authorization", "Basic " + encoded)
+                .post("/oauth2/authorize?response_type=token&client_id=divorce&redirect_uri=" +
+                        redirectUriEnv)
+                .body()
+                .path("access-token");
+
+        userToken = "Bearer " + token;
+        return userToken;
     }
 }

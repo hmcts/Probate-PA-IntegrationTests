@@ -26,7 +26,6 @@ public abstract class IntegrationTestBase {
     public void solCcdServiceUrl(@Value("${ccd.data.store.api.url}") String solCcdServiceUrl) {
         this.solCcdServiceUrl = solCcdServiceUrl;
         RestAssured.baseURI = solCcdServiceUrl;
-        System.out.println("base uri..." + RestAssured.baseURI);
     }
 
 

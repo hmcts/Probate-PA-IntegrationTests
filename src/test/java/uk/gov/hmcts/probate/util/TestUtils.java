@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+
 @ContextConfiguration(classes = TestContextConfiguration.class)
 @Component
 public class TestUtils {
@@ -23,18 +24,11 @@ public class TestUtils {
     protected SolCCDServiceAuthTokenGenerator serviceAuthTokenGenerator;
 
     private String serviceToken;
-    private String userId;
+
 
     @PostConstruct
     public void init() {
         serviceToken = serviceAuthTokenGenerator.generateServiceToken();
-
-        userId = System.getenv().get("IDAM_USER_ID");
-
-        if (userId == null || userId.isEmpty()) {
-            //   serviceAuthTokenGenerator.createNewUser();
-            userId = serviceAuthTokenGenerator.getUserId();
-        }
     }
 
     public String getJsonFromFile(String fileName) {
@@ -58,20 +52,22 @@ public class TestUtils {
     }
 
     public Headers getHeadersWithUserId() {
-        return getHeadersWithUserId(serviceToken, userId);
+        return getHeadersWithUserId(serviceToken);
     }
 
-    public Headers getHeadersWithUserId(String serviceToken, String userId) {
-
+    public Headers getHeadersWithUserId(String serviceToken) {
         return Headers.headers(
                 new Header("ServiceAuthorization", serviceToken),
                 new Header("Content-Type", ContentType.JSON.toString()),
-                new Header("Authorization", serviceAuthTokenGenerator.getUserToken()));
+                new Header("Authorization", serviceAuthTokenGenerator.generateUserTokenWithNoRoles()));
 
 
     }
 
     public String getUserId() {
-        return this.userId;
+        return serviceAuthTokenGenerator.getUserId();
     }
+
+
+
 }
