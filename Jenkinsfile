@@ -5,13 +5,13 @@ import uk.gov.hmcts.Packager
 import uk.gov.hmcts.Versioner
 
 def triggers = []
-if (env.BRANCH_NAME == "develop") {
+if (env.BRANCH_NAME == "master") {
     triggers << cron('H H(0-2) * * *') //build to trigger sometime between midnight and 2am every day
 }
 
 properties(
         [
-                [$class: 'GithubProjectProperty', projectUrlStr: 'https://git.reform.hmcts.net/probate/sol-ccd-services-integration-tests.git'],
+                [$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/hmcts/Probate-PA-IntegrationTests.git'],
                 pipelineTriggers(triggers),
                 parameters([
                         string(description: 'Sol ccd url', defaultValue: 'http://betaDevbprobateapp01.reform.hmcts.net:4104', name: 'SOL_CCD_SERVICE_BASE_URL'),
@@ -46,8 +46,8 @@ node {
         }
 
         stage('Package (Docker)') {
-            if ("develop" == "${env.BRANCH_NAME}") {
-                dockerImage imageName: 'probate/sol-ccd-services-integration-tests', tags: ['develop']
+            if ("master" == "${env.BRANCH_NAME}") {
+                dockerImage imageName: 'probate/sol-ccd-services-integration-tests', tags: ['master']
             } else if ("master" == "${env.BRANCH_NAME}") {
                 dockerImage imageName: 'probate/sol-ccd-services-integration-tests'
             }
