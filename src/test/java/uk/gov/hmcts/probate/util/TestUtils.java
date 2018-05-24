@@ -56,6 +56,7 @@ public class TestUtils {
     }
 
     public Headers getHeadersWithUserId(String serviceToken) {
+        System.out.println("Service Token Generated..." + serviceToken);
         return Headers.headers(
                 new Header("ServiceAuthorization", serviceToken),
                 new Header("Content-Type", ContentType.JSON.toString()),
