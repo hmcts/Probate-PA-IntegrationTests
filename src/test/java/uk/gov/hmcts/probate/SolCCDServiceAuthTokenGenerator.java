@@ -100,12 +100,13 @@ public class SolCCDServiceAuthTokenGenerator {
         createUserInIdam();
         System.out.println("created user in idam");
         final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
+        System.out.println("encoded auth is.." + encoded);
         final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
                 ? redirectUri
                 : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
         Response res1
                 = RestAssured.given().baseUri(idamUserBaseUrl)
-                .header("Authorization", "Basic " + encoded)
+                .header("Authorization",  encoded)
                 .post("/oauth2/authorize?response_type=token&client_id=divorce&redirect_uri=" +
                         redirectUriEnv);
         System.out.println("res1 status code..." + res1.getStatusCode());
