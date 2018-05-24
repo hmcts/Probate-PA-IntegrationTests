@@ -82,7 +82,7 @@ public class SolCCDServiceAuthTokenGenerator {
     private void createUserInIdam() {
 
         idamUsername = "simulate-delivered" + UUID.randomUUID() + "@notifications.service.gov.uk";
-        idamPassword = "Venu1234";
+        idamPassword = UUID.randomUUID().toString();
        Response res= RestAssured.given()
                 .header("Content-Type", "application/json")
                 .body("{\"email\":\"" + idamUsername + "\", \"forename\":\"Test\",\"surname\":\"User\",\"password\":\"" + idamPassword + "\"}")
@@ -103,17 +103,19 @@ public class SolCCDServiceAuthTokenGenerator {
         final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
                 ? redirectUri
                 : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
-        final String token
+        Response res1
                 = RestAssured.given().baseUri(idamUserBaseUrl)
                 .header("Authorization", "Basic " + encoded)
                 .post("/oauth2/authorize?response_type=token&client_id=divorce&redirect_uri=" +
-                        redirectUriEnv)
+                        redirectUriEnv);
+        System.out.println("res1 status code..." + res1.getStatusCode());
+        System.out.println("res1 body.." + res1.getBody().prettyPrint());
 
-                .body()
-                .path("access-token");
-        System.out.println("token generated.."+token);
-
-        userToken = "Bearer " + token;
+//                .body()
+//                .path("access-token");
+//        System.out.println("token generated.."+token);
+//
+//        userToken = "Bearer " + token;
         return userToken;
     }
 }
