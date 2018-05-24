@@ -88,6 +88,8 @@ public class SolCCDServiceAuthTokenGenerator {
                 .body("{\"email\":\"" + idamUsername + "\", \"forename\":\"Test\",\"surname\":\"User\",\"password\":\"" + idamPassword + "\"}")
                 .post(idamCreateUrl());
 
+       System.out.println("Idamcreateurl...." + idamCreateUrl());
+
         System.out.println("response status code from create user..." + res.getStatusCode());
        System.out.println("response from create user..." + res.getBody().prettyPrint());
         System.out.println("in create useridam ");
