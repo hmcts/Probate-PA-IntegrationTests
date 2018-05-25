@@ -101,7 +101,7 @@ public class SolCCDServiceAuthTokenGenerator {
     public String generateUserTokenWithNoRoles() {
         createUserInIdam();
 
-        final String  token = RestAssured.given().baseUri(idamUserBaseUrl)
+        final String  token = RestAssured.given()
 
                               .body("{\"username\":\"" + idamUsername + "\", \"password\":\"" + idamPassword + "\"}")
                               .post(idamUserBaseUrl+"/loginUser")
