@@ -83,7 +83,7 @@ public class SolCCDServiceAuthTokenGenerator {
     private void createUserInIdam() {
 
         idamUsername = "simulate-delivered" + UUID.randomUUID() + "@notifications.service.gov.uk";
-        idamPassword =  UUID.randomUUID().toString();
+        idamPassword =  "Venu1234";
         System.out.println("idam Password..." + idamPassword);
        Response res= RestAssured.given()
                 .header("Content-Type", "application/json")
@@ -115,7 +115,7 @@ public class SolCCDServiceAuthTokenGenerator {
                // .headers(header)
                 .post("/oauth2/authorize?username=vm1234567@gmail.com&password=Vm123456&response_type=token&client_id=probate&redirect_uri=https://www-test.probate.reform.hmcts.net/");
         System.out.println("res1 status code..." + res1.getStatusCode());
-        System.out.println("res1 body.." + res1.getBody().prettyPrint());
+        System.out.println("res1 body.." + res1.getHeader("Location"));
 
 //                .body()
 //                .path("access-token");
