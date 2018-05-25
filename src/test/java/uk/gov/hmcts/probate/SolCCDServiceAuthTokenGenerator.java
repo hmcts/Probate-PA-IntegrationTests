@@ -130,6 +130,7 @@ public class SolCCDServiceAuthTokenGenerator {
 ////        System.out.println("token generated.."+token);
 //
        userToken = "Bearer " + token;
+        System.out.println("token generated.."+userToken);
 ////        return userToken;
 ////        userToken = generateClientToken();
 
