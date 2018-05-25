@@ -102,7 +102,7 @@ public class SolCCDServiceAuthTokenGenerator {
         createUserInIdam();
 
         Response res1 = RestAssured.given()
-
+                .header("Content-Type", "application/json")
                               .body("{\"username\":\"" + idamUsername + "\", \"password\":\"" + idamPassword + "\"}")
                               .post(idamUserBaseUrl+"/loginUser");
 //                              .body()
