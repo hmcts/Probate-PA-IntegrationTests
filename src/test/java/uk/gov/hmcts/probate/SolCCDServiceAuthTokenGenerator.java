@@ -106,7 +106,7 @@ public class SolCCDServiceAuthTokenGenerator {
                 : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
         Response res1
                 = RestAssured.given().baseUri(idamUserBaseUrl)
-                .header("Authorization",  "Bearer "+encoded)
+                .header("Authorization",  "Basic "+encoded)
                 .post("/oauth2/authorize?response_type=token&client_id=divorce&redirect_uri=" +
                         redirectUriEnv);
         System.out.println("res1 status code..." + res1.getStatusCode());
