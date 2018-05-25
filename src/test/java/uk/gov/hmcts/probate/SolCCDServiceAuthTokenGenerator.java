@@ -67,10 +67,10 @@ public class SolCCDServiceAuthTokenGenerator {
     }
 
     public String getUserId() {
-        String jwt = userToken.replaceFirst("Bearer ", "");
+      //  String jwt = userToken.replaceFirst("Bearer ", "");
         Map<String, Object> claims;
         try {
-            claims = JWTParser.parse(jwt).getJWTClaimsSet().getClaims();
+            claims = JWTParser.parse(userToken).getJWTClaimsSet().getClaims();
         } catch (ParseException e) {
             throw new IllegalStateException("Cannot find user from authorization token ", e);
         }
