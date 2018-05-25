@@ -115,7 +115,7 @@ public class SolCCDServiceAuthTokenGenerator {
                         .param("password","Vm123456" )
                               .post(idamUserBaseUrl+"/loginUser")
                               .body()
-                              .path("access_token");
+                              .path("api_auth_token");
 
 
 //        System.out.println("created user in idam");
