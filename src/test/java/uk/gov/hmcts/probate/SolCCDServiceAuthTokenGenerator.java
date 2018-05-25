@@ -114,7 +114,7 @@ public class SolCCDServiceAuthTokenGenerator {
                         .param("username", "vm1234567@gmail.com")
                         .param("password","Vm123456" )
                               .post(idamUserBaseUrl+"/loginUser");
-       final String token = res1.getBody().path("access-token");
+       final String token = res1.getBody().toString();
 //                              .body()
 //                              .path("access-token");
 
