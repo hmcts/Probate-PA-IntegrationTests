@@ -110,6 +110,7 @@ public class SolCCDServiceAuthTokenGenerator {
 //        header.put("password", idamPassword);
         Response res1
                 = RestAssured.given().baseUri(idamUserBaseUrl)
+                .header("Authorization",  "Basic "+encoded)
                // .headers(header)
                 .post("/oauth2/authorize?response_type=token&client_id=probate&redirect_uri=https://www-test.probate.reform.hmcts.net&"+"username:"+idamUsername
                         +"&password:"+idamPassword);
