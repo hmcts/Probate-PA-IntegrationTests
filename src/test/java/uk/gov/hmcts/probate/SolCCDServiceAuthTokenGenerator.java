@@ -110,12 +110,12 @@ public class SolCCDServiceAuthTokenGenerator {
 //                .param("password", SMOKE_TEST_USER_PASSWORD)
 //                .header("Accept", ContentType.JSON.getAcceptHeader()).post()
 
-        Response res1 = RestAssured.given()
+        final String token = RestAssured.given()
                         .param("username", "vm1234567@gmail.com")
                         .param("password","Vm123456" )
-                              .post(idamUserBaseUrl+"/loginUser");
-//                              .body()
-//                              .path("access-token");
+                              .post(idamUserBaseUrl+"/loginUser")
+                              .body()
+                              .path("access-token");
 
 //        System.out.println("created user in idam");
 //        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
@@ -131,15 +131,15 @@ public class SolCCDServiceAuthTokenGenerator {
 //                .header("Authorization",  "Basic "+encoded)
 //               // .headers(header)
 //                .post("/oauth2/authorize?username=vm1234567@gmail.com&password=Vm123456&response_type=token&client_id=probate&redirect_uri=https://www-test.probate.reform.hmcts.net/");
-        System.out.println("res1 status code..." + res1.getStatusCode());
+//        System.out.println("res1 status code..." + res1.getStatusCode());
 //        System.out.println("res1 body.." + res1.getHeader("Location"));
 //
 ////                .body()
 ////                .path("access-token");
 ////        System.out.println("token generated.."+token);
 //
-     //  userToken = "Bearer " + token;
-       // System.out.println("token generated.."+userToken);
+       userToken = "Bearer " + token;
+        System.out.println("token generated.."+userToken);
 ////        return userToken;
 ////        userToken = generateClientToken();
 
