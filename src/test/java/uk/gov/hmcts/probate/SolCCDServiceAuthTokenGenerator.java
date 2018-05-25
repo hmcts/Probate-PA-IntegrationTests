@@ -84,6 +84,7 @@ public class SolCCDServiceAuthTokenGenerator {
 
         idamUsername = "simulate-delivered" + UUID.randomUUID() + "@notifications.service.gov.uk";
         idamPassword =  UUID.randomUUID().toString();
+        System.out.println("idam Password..." + idamPassword);
        Response res= RestAssured.given()
                 .header("Content-Type", "application/json")
                 .body("{\"email\":\"" + idamUsername + "\", \"forename\":\"Test\",\"surname\":\"User\",\"password\":\"" + idamPassword + "\"}")
