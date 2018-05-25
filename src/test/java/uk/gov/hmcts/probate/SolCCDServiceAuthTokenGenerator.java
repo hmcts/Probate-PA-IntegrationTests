@@ -5,6 +5,7 @@ import com.nimbusds.jwt.JWTParser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -100,12 +101,18 @@ public class SolCCDServiceAuthTokenGenerator {
 
     public String generateUserTokenWithNoRoles() {
         createUserInIdam();
-        Map<String, String >m = new HashMap();
-        m.put("username", "vm1234567@gmail.com");
-        m.put("password", "Vm123456");
+//        Map<String, String >m = new HashMap();
+//        m.put("username", "vm1234567@gmail.com");
+//        m.put("password", "Vm123456");
+
+//        given().urlEncodingEnabled(true)
+//                .param("username", SMOKE_TEST_USER)
+//                .param("password", SMOKE_TEST_USER_PASSWORD)
+//                .header("Accept", ContentType.JSON.getAcceptHeader()).post()
 
         Response res1 = RestAssured.given()
-                              .body(m)
+                        .param("username", "vm1234567@gmail.com")
+                        .param("password","Vm123456" )
                               .post(idamUserBaseUrl+"/loginUser");
 //                              .body()
 //                              .path("access-token");
