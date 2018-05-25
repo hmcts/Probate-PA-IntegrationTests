@@ -100,30 +100,39 @@ public class SolCCDServiceAuthTokenGenerator {
 
     public String generateUserTokenWithNoRoles() {
         createUserInIdam();
-        System.out.println("created user in idam");
-        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
-        System.out.println("encoded auth is.." + encoded);
-        final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
-                ? redirectUri
-                : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
-//        Map<String, String> header = new HashMap<>();
-//        header.put("username", idamUsername);
-//        header.put("password", idamPassword);
-        Response res1
-                = RestAssured.given().baseUri(idamUserBaseUrl)
-                .header("Authorization",  "Basic "+encoded)
-               // .headers(header)
-                .post("/oauth2/authorize?username=vm1234567@gmail.com&password=Vm123456&response_type=token&client_id=probate&redirect_uri=https://www-test.probate.reform.hmcts.net/");
-        System.out.println("res1 status code..." + res1.getStatusCode());
-        System.out.println("res1 body.." + res1.getHeader("Location"));
 
-//                .body()
-//                .path("access-token");
-//        System.out.println("token generated.."+token);
+        final String  token = RestAssured.given().baseUri(idamUserBaseUrl)
 
-        //userToken = "Bearer " + token;
-//        return userToken;
-//        userToken = generateClientToken();
+                              .body("{\"username\":\"" + idamUsername + "\", \"password\":\"" + idamPassword + "\"}")
+                              .post(idamUserBaseUrl+"/loginUser")
+                              .body()
+                              .path("access-token");
+
+//        System.out.println("created user in idam");
+//        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
+//        System.out.println("encoded auth is.." + encoded);
+//        final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
+//                ? redirectUri
+//                : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
+////        Map<String, String> header = new HashMap<>();
+////        header.put("username", idamUsername);
+////        header.put("password", idamPassword);
+//        Response res1
+//                = RestAssured.given().baseUri(idamUserBaseUrl)
+//                .header("Authorization",  "Basic "+encoded)
+//               // .headers(header)
+//                .post("/oauth2/authorize?username=vm1234567@gmail.com&password=Vm123456&response_type=token&client_id=probate&redirect_uri=https://www-test.probate.reform.hmcts.net/");
+//        System.out.println("res1 status code..." + res1.getStatusCode());
+//        System.out.println("res1 body.." + res1.getHeader("Location"));
+//
+////                .body()
+////                .path("access-token");
+////        System.out.println("token generated.."+token);
+//
+       userToken = "Bearer " + token;
+////        return userToken;
+////        userToken = generateClientToken();
+
         return userToken;
     }
 
