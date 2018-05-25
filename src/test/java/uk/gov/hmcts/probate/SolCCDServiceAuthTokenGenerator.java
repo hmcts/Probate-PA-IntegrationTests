@@ -110,13 +110,13 @@ public class SolCCDServiceAuthTokenGenerator {
 //                .param("password", SMOKE_TEST_USER_PASSWORD)
 //                .header("Accept", ContentType.JSON.getAcceptHeader()).post()
 
-       Response res1 = RestAssured.given()
+       final String token = RestAssured.given()
                         .param("username", "vm1234567@gmail.com")
                         .param("password","Vm123456" )
-                              .post(idamUserBaseUrl+"/loginUser");
-       final String token = res1.getBody().prettyPrint();
-//                              .body()
-//                              .path("access-token");
+                              .post(idamUserBaseUrl+"/loginUser")
+                              .body()
+                              .path("access_token");
+
 
 //        System.out.println("created user in idam");
 //        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
