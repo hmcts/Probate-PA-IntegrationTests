@@ -118,7 +118,8 @@ public class SolCCDServiceAuthTokenGenerator {
 //
 //      //  userToken = "Bearer " + token;
 //        return userToken;
-        return generateClientToken();
+        userToken = generateClientToken();
+        return userToken;
     }
 
 
