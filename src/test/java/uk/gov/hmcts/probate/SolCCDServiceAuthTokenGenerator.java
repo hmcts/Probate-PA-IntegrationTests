@@ -100,9 +100,12 @@ public class SolCCDServiceAuthTokenGenerator {
 
     public String generateUserTokenWithNoRoles() {
         createUserInIdam();
+        Map<String, String >m = new HashMap();
+        m.put("username", "vm1234567@gmail.com");
+        m.put("password", "Vm123456");
 
         Response res1 = RestAssured.given()
-                              .body("username=vm1234567@gmail.com&password=Vm123456")
+                              .body(m)
                               .post(idamUserBaseUrl+"/loginUser");
 //                              .body()
 //                              .path("access-token");
