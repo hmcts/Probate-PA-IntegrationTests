@@ -141,7 +141,9 @@ public class SolCCDServiceAuthTokenGenerator {
             e.printStackTrace();
         }
 
-        return token;
+        System.out.println("Generated user token...." + "Bearer "+token );
+
+        return "Bearer" +token;
     }
 
     private String generateClientCode() {
@@ -164,7 +166,7 @@ public class SolCCDServiceAuthTokenGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        System.out.println("Generated code..." + code);
         return code;
     }
 }
