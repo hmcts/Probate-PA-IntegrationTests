@@ -97,26 +97,74 @@ public class SolCCDServiceAuthTokenGenerator {
 
 
     public String generateUserTokenWithNoRoles() {
+//        createUserInIdam();
+//        System.out.println("created user in idam");
+//        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
+//        System.out.println("encoded auth is.." + encoded);
+//        final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
+//                ? redirectUri
+//                : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
+//        Response res1
+//                = RestAssured.given().baseUri(idamUserBaseUrl)
+//                .header("Authorization",  "Basic "+encoded)
+//                .post("/oauth2/authorize?response_type=token&client_id=divorce&redirect_uri=" +
+//                        redirectUriEnv);
+//        System.out.println("res1 status code..." + res1.getStatusCode());
+//        System.out.println("res1 body.." + res1.getBody().prettyPrint());
+//
+////                .body()
+////                .path("access-token");
+////        System.out.println("token generated.."+token);
+//
+//      //  userToken = "Bearer " + token;
+//        return userToken;
+        return generateClientToken();
+    }
+
+
+    private String generateClientToken() {
+        String code = generateClientCode();
+        String token = "";
+
+        String jsonResponse = post(baseServiceOauth2Url + "/oauth2/token?code=" + code +
+                "&client_secret=secret/test/ccidam/idam-api/oauth2/client-secrets/probate"+
+                "&client_id=probate"+
+                "&redirect_uri=https://www-test.probate.reform.hmcts.net"+
+                "&grant_type=authorization_code")
+                .body().asString();
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            token = mapper.readValue(jsonResponse, ClientAuthorizationResponse.class).accessToken;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return token;
+    }
+
+    private String generateClientCode() {
+        String code = "";
         createUserInIdam();
         System.out.println("created user in idam");
         final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
         System.out.println("encoded auth is.." + encoded);
-        final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
-                ? redirectUri
-                : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
-        Response res1
-                = RestAssured.given().baseUri(idamUserBaseUrl)
-                .header("Authorization",  "Basic "+encoded)
-                .post("/oauth2/authorize?response_type=token&client_id=divorce&redirect_uri=" +
-                        redirectUriEnv);
-        System.out.println("res1 status code..." + res1.getStatusCode());
-        System.out.println("res1 body.." + res1.getBody().prettyPrint());
+        String jsonResponse = given()
+                .header("Authorization", "Basic "+encoded)
+                .post(baseServiceOauth2Url + "/oauth2/authorize?response_type=code" +
+                        "&client_id=probate"+
+                        "&redirect_uri=https://www-test.probate.reform.hmcts.net")
+                .asString();
 
-//                .body()
-//                .path("access-token");
-//        System.out.println("token generated.."+token);
+        ObjectMapper mapper = new ObjectMapper();
 
-      //  userToken = "Bearer " + token;
-        return userToken;
+        try {
+            code = mapper.readValue(jsonResponse, ClientAuthorizationCodeResponse.class).code;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return code;
     }
 }
