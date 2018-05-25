@@ -74,7 +74,7 @@ public class SolCCDServiceAuthTokenGenerator {
         } catch (ParseException e) {
             throw new IllegalStateException("Cannot find user from authorization token ", e);
         }
-        String userid_local = (String) claims.get("id");
+        String userid_local = (String) claims.get("authGrantId");
         System.out.println("userid_local...." + userid_local);
         return userid_local;
 
@@ -115,7 +115,7 @@ public class SolCCDServiceAuthTokenGenerator {
                         .param("password","Vm123456" )
                               .post(idamUserBaseUrl+"/loginUser")
                               .body()
-                              .path("api_auth_token");
+                              .path("access_token");
 
 
 //        System.out.println("created user in idam");
