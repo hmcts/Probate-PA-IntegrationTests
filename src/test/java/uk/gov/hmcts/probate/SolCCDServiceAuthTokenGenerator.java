@@ -67,14 +67,21 @@ public class SolCCDServiceAuthTokenGenerator {
     }
 
     public String getUserId() {
-      //  String jwt = userToken.replaceFirst("Bearer ", "");
-        Map<String, Object> claims;
-        try {
-            claims = JWTParser.parse(userToken).getJWTClaimsSet().getClaims();
-        } catch (ParseException e) {
-            throw new IllegalStateException("Cannot find user from authorization token ", e);
-        }
-        String userid_local = (String) claims.get("authGrantId");
+
+        String userid_local= RestAssured.given()
+                .header("Authorization", userToken)
+                .get(idamUserBaseUrl+"/details")
+                .body()
+                .path("id");
+//        https://idam-api-idam-saat.service.core-compute-idam-saat.internal/details
+//      //  String jwt = userToken.replaceFirst("Bearer ", "");
+//        Map<String, Object> claims;
+//        try {
+//            claims = JWTParser.parse(userToken).getJWTClaimsSet().getClaims();
+//        } catch (ParseException e) {
+//            throw new IllegalStateException("Cannot find user from authorization token ", e);
+//        }
+//        String userid_local = (String) claims.get("authGrantId");
         System.out.println("userid_local...." + userid_local);
         return userid_local;
 
@@ -139,7 +146,7 @@ public class SolCCDServiceAuthTokenGenerator {
 ////                .path("access-token");
 ////        System.out.println("token generated.."+token);
 //
-       userToken = token;
+       userToken = "Bearer "+token;
         System.out.println("token generated.."+userToken);
 ////        return userToken;
 ////        userToken = generateClientToken();
