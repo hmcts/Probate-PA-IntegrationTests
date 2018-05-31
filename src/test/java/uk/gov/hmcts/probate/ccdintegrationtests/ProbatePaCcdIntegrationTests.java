@@ -71,7 +71,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
                 .body(rep)
                 .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
                 .then()
-                .statusCode(201).and().body("state",equalToIgnoringCase("CaseCreated"));
+                .statusCode(201).and().body("state", equalToIgnoringCase("CaseCreated"));
 
     }
 
@@ -90,7 +90,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
                 .body(rep)
                 .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
                 .then()
-                .statusCode(201).and().body("case_type_id",equalToIgnoringCase("GrantOfRepresentation"));
+                .statusCode(201).and().body("case_type_id", equalToIgnoringCase("GrantOfRepresentation"));
 
     }
 
@@ -110,7 +110,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
                 .body(rep)
                 .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
                 .then()
-                .statusCode(201).and().body("security_classification",equalToIgnoringCase("PUBLIC"));
+                .statusCode(201).and().body("security_classification", equalToIgnoringCase("PUBLIC"));
 
     }
 
@@ -166,6 +166,43 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
                 .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
                 .then()
                 .statusCode(201).and().extract().body().asString().contentEquals("id");
+    }
+
+
+    @Test
+    public void verifycaseDataIsPresentInTheSuccessResponse() {
+        token =
+                SerenityRest.given()
+                        .headers(utils.getHeadersWithUserId())
+                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
+                        .then().assertThat().statusCode(200).extract().path("token");
+
+        String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
+
+        SerenityRest.given()
+                .headers(utils.getHeadersWithUserId())
+                .body(rep)
+                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+                .then()
+                .statusCode(201).and().extract().body().asString().contentEquals("case_data");
+    }
+
+    @Test
+    public void verifyDataClassificationIsPresentInTheSuccessResponse() {
+        token =
+                SerenityRest.given()
+                        .headers(utils.getHeadersWithUserId())
+                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
+                        .then().assertThat().statusCode(200).extract().path("token");
+
+        String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
+
+        SerenityRest.given()
+                .headers(utils.getHeadersWithUserId())
+                .body(rep)
+                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+                .then()
+                .statusCode(201).and().extract().body().asString().contentEquals("data_classification");
     }
 
     @Test
