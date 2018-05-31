@@ -165,7 +165,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
                 .body(rep)
                 .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
                 .then()
-                .statusCode(201).and().extract().body().asString().contentEquals("id");
+                .statusCode(201).and().extract().body().asString().contains("id");
     }
 
 
@@ -184,7 +184,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
                 .body(rep)
                 .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
                 .then()
-                .statusCode(201).and().extract().body().asString().contentEquals("case_data");
+                .statusCode(201).and().extract().body().asString().contains("case_data");
     }
 
     @Test
@@ -202,7 +202,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
                 .body(rep)
                 .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
                 .then()
-                .statusCode(201).and().extract().body().asString().contentEquals("data_classification");
+                .statusCode(201).and().extract().body().asString().contains("data_classification");
     }
 
 
