@@ -123,22 +123,22 @@ public class SolCCDServiceAuthTokenGenerator {
         String code = generateClientCode();
         String token = "";
 
-        Response res = RestAssured.given().post(idamUserBaseUrl + "/oauth2/token?code=" + code +
+        token = RestAssured.given().post(idamUserBaseUrl + "/oauth2/token?code=" + code +
                 "&client_secret="+secret+
                 "&client_id=probate"+
                 "&redirect_uri=https://www-test.probate.reform.hmcts.net/oauth2/callback"+
-                "&grant_type=authorization_code");
-              //  .body().path("access-token");
+                "&grant_type=authorization_code")
+                .body().path("access_token");
 
-        ObjectMapper mapper = new ObjectMapper();
+        //ObjectMapper mapper = new ObjectMapper();
 
 //        try {
 //            token = mapper.readValue(jsonResponse, ClientAuthorizationResponse.class).accessToken;
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        System.out.println("token gen response body code..."+res.getStatusCode());
-        System.out.println("token gen response body.."+res.getBody().prettyPrint());
+//        System.out.println("token gen response body code..."+res.getStatusCode());
+//        System.out.println("token gen response body.."+res.getBody().prettyPrint());
         System.out.println("Generated user token...." + "Bearer "+token );
 
         return "Bearer" +token;
