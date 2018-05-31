@@ -20,7 +20,8 @@ properties(
                                                       string(description: 'Service auth service name', defaultValue: 'PROBATE_BACKEND', name: 'AUTHORISED_SERVICES'),
                                                       string(description: 'Idam user id', defaultValue: '22603', name: 'IDAM_USER_ID'),
                                                       string(description: 'Idam redirect url', defaultValue: 'https://ccd-case-management-web-saat.service.core-compute-saat.internal/oauth2redirect', name: 'IDAM_OAUTH2_REDIRECT_URI'),
-                                                       string(description: 'env', defaultValue: 'saat', name: 'ENV')
+                                                       string(description: 'env', defaultValue: 'saat', name: 'ENV'),
+                                                       string(description: 'secret', defaultValue: 'abc', name: 'SECRET')
 
                                               ])
 
@@ -49,6 +50,7 @@ node {
           env.CCD_DATA_STORE_API_URL = params.CCD_DATA_STORE_API_URL
           env.IDAM_OAUTH2_REDIRECT_URI =params.IDAM_OAUTH2_REDIRECT_URI
           env.ENV=params.ENV
+          env.SECRET=params.SECRET
             sh "./gradlew clean build"
         }
 
