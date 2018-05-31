@@ -78,7 +78,6 @@ public class SolCCDServiceAuthTokenGenerator {
             throw new IllegalStateException("Cannot find user from authorization token ", e);
         }
         String userid_local = (String) claims.get("id");
-        System.out.println("userid_local...." + userid_local);
         return userid_local;
 
     }
@@ -88,34 +87,17 @@ public class SolCCDServiceAuthTokenGenerator {
 
         idamUsername = "simulate-delivered" + UUID.randomUUID() + "@notifications.service.gov.uk";
         idamPassword = "Test123456";
-      Response res=  RestAssured.given()
+        Response res = RestAssured.given()
                 .header("Content-Type", "application/json")
                 .body("{\"email\":\"" + idamUsername + "\", \"forename\":\"Test\",\"surname\":\"User\",\"password\":\"" + idamPassword + "\"}")
                 .post(idamCreateUrl());
-      System.out.println("User created response..." +res.getStatusCode());
+        System.out.println("User created response..." + res.getStatusCode());
         System.out.println("in create useridam ");
     }
 
 
     public String generateUserTokenWithNoRoles() {
-//        createUserInIdam();
-//        System.out.println("created user in idam");
-//        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
-//        final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
-//                ? redirectUri
-//                : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
-//        final String token = RestAssured.given().baseUri(idamUserBaseUrl)
-//                .header("Authorization", "Basic " + encoded)
-//                .post("/oauth2/authorize?response_type=token&client_id=divorce&redirect_uri=" +
-//                        redirectUriEnv)
-//                .body()
-//                .path("access-token");
-//        System.out.println("token generated.." + token);
-//
-//        userToken = "Bearer " + token;
-//        System.out.println("Usertoken generated..." + userToken);
-//        return userToken;
-        userToken=generateClientToken();
+        userToken = generateClientToken();
         return userToken;
     }
 
@@ -124,24 +106,13 @@ public class SolCCDServiceAuthTokenGenerator {
         String token = "";
 
         token = RestAssured.given().post(idamUserBaseUrl + "/oauth2/token?code=" + code +
-                "&client_secret="+secret+
-                "&client_id=probate"+
-                "&redirect_uri=https://www-test.probate.reform.hmcts.net/oauth2/callback"+
+                "&client_secret=" + secret +
+                "&client_id=probate" +
+                "&redirect_uri=" + redirectUri +
                 "&grant_type=authorization_code")
                 .body().path("access_token");
 
-        //ObjectMapper mapper = new ObjectMapper();
-
-//        try {
-//            token = mapper.readValue(jsonResponse, ClientAuthorizationResponse.class).accessToken;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        System.out.println("token gen response body code..."+res.getStatusCode());
-//        System.out.println("token gen response body.."+res.getBody().prettyPrint());
-        System.out.println("Generated user token...." + "Bearer "+token );
-
-        return "Bearer " +token;
+        return "Bearer " + token;
     }
 
     private String generateClientCode() {
@@ -150,27 +121,10 @@ public class SolCCDServiceAuthTokenGenerator {
         System.out.println("created user in idam");
         final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
         System.out.println("encoded auth is.." + encoded);
-       code= RestAssured.given().baseUri(idamUserBaseUrl)
+        code = RestAssured.given().baseUri(idamUserBaseUrl)
                 .header("Authorization", "Basic " + encoded)
-                .post("/oauth2/authorize?response_type=code&client_id=probate&redirect_uri=https://www-test.probate.reform.hmcts.net/oauth2/callback")
-               .body().path("code");
-
-//        String jsonResponse = given()
-//                .header("Authorization", "Bearer "+encoded)
-//                .post(idamUserBaseUrl + "/oauth2/authorize?response_type=code" +
-//                        "&client_id=probate"+
-//                        "&redirect_uri="+ redirectUri)
-//                .asString();
-//
-//        ObjectMapper mapper = new ObjectMapper();
-//
-//        try {
-//            code = mapper.readValue(jsonResponse, ClientAuthorizationCodeResponse.class).code;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        System.out.println("Response code from gen code..." + res.getStatusCode());
-//        System.out.println("Response body from gen code..." + res.getBody().prettyPrint());
+                .post("/oauth2/authorize?response_type=code&client_id=probate&redirect_uri=" + redirectUri)
+                .body().path("code");
         System.out.println("Generated code..." + code);
 
         return code;

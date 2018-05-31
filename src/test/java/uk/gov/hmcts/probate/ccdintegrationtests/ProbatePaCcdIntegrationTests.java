@@ -24,12 +24,12 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
-        Response res = SerenityRest.given()
+        SerenityRest.given()
                 .headers(utils.getHeadersWithUserId())
                 .body(rep)
-                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases");
-        assertTrue(res.getStatusCode() == 201);
-        System.out.println("Response body..." + res.getBody().prettyPrint());
+                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases").
+                then()
+                .statusCode(201);
     }
 
 
@@ -46,14 +46,6 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
                 .then()
                 .statusCode(201).and().body("jurisdiction", equalToIgnoringCase("PROBATE"));
 
-    }
-
-    private void generateEventToken() {
-        token =
-                SerenityRest.given()
-                        .headers(utils.getHeadersWithUserId())
-                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
-                        .then().assertThat().statusCode(200).extract().path("token");
     }
 
     @Test
@@ -200,4 +192,11 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
                 .then().assertThat().statusCode(500);
     }
 
+    private void generateEventToken() {
+        token =
+                SerenityRest.given()
+                        .headers(utils.getHeadersWithUserId())
+                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
+                        .then().assertThat().statusCode(200).extract().path("token");
+    }
 }
