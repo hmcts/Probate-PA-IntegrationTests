@@ -141,7 +141,7 @@ public class SolCCDServiceAuthTokenGenerator {
 //        System.out.println("token gen response body.."+res.getBody().prettyPrint());
         System.out.println("Generated user token...." + "Bearer "+token );
 
-        return "Bearer" +token;
+        return "Bearer " +token;
     }
 
     private String generateClientCode() {
