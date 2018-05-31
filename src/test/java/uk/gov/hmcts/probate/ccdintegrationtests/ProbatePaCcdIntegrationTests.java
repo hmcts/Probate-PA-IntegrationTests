@@ -96,6 +96,79 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
 
     @Test
+    public void verifySecurityClassificationIsPresentInTheSuccessResponse() {
+        token =
+                SerenityRest.given()
+                        .headers(utils.getHeadersWithUserId())
+                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
+                        .then().assertThat().statusCode(200).extract().path("token");
+
+        String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
+
+        SerenityRest.given()
+                .headers(utils.getHeadersWithUserId())
+                .body(rep)
+                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+                .then()
+                .statusCode(201).and().body("security_classification",equalToIgnoringCase("PUBLIC"));
+
+    }
+
+    @Test
+    public void verifyCreatedDateIsPresentInTheSuccessResponse() {
+        token =
+                SerenityRest.given()
+                        .headers(utils.getHeadersWithUserId())
+                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
+                        .then().assertThat().statusCode(200).extract().path("token");
+
+        String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
+
+        SerenityRest.given()
+                .headers(utils.getHeadersWithUserId())
+                .body(rep)
+                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+                .then()
+                .statusCode(201).and().extract().body().asString().contains("created_date");
+    }
+
+    @Test
+    public void verifyLastModifiedIsPresentInTheSuccessResponse() {
+        token =
+                SerenityRest.given()
+                        .headers(utils.getHeadersWithUserId())
+                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
+                        .then().assertThat().statusCode(200).extract().path("token");
+
+        String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
+
+        SerenityRest.given()
+                .headers(utils.getHeadersWithUserId())
+                .body(rep)
+                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+                .then()
+                .statusCode(201).and().extract().body().asString().contains("last_modified");
+    }
+
+    @Test
+    public void verifyIdIsPresentInTheSuccessResponse() {
+        token =
+                SerenityRest.given()
+                        .headers(utils.getHeadersWithUserId())
+                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
+                        .then().assertThat().statusCode(200).extract().path("token");
+
+        String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
+
+        SerenityRest.given()
+                .headers(utils.getHeadersWithUserId())
+                .body(rep)
+                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+                .then()
+                .statusCode(201).and().extract().body().asString().contentEquals("id");
+    }
+
+    @Test
     public void validateFailureWithInvalidCCDCasePayload() {
 
         String rep = utils.getJsonFromFile("failure.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"abc\"");
