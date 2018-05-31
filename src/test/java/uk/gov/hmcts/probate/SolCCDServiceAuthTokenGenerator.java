@@ -123,7 +123,7 @@ public class SolCCDServiceAuthTokenGenerator {
         String jsonResponse = post(idamUserBaseUrl + "/oauth2/token?code=" + code +
                 "&client_secret=secret/test/ccidam/idam-api/oauth2/client-secrets/probate"+
                 "&client_id=probate"+
-                "&redirect_uri="+redirectUri+
+                "&redirect_uri=https://www-test.probate.reform.hmcts.net/oauth2/callback"+
                 "&grant_type=authorization_code")
                 .body().asString();
 
@@ -146,9 +146,10 @@ public class SolCCDServiceAuthTokenGenerator {
         System.out.println("created user in idam");
         final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
         System.out.println("encoded auth is.." + encoded);
-       Response res= RestAssured.given().baseUri(idamUserBaseUrl)
+       code= RestAssured.given().baseUri(idamUserBaseUrl)
                 .header("Authorization", "Basic " + encoded)
-                .post("/oauth2/authorize?response_type=code&client_id=probate&redirect_uri=https://www-test.probate.reform.hmcts.net/oauth2/callback");
+                .post("/oauth2/authorize?response_type=code&client_id=probate&redirect_uri=https://www-test.probate.reform.hmcts.net/oauth2/callback")
+               .body().path("code");
 
 //        String jsonResponse = given()
 //                .header("Authorization", "Bearer "+encoded)
@@ -164,9 +165,10 @@ public class SolCCDServiceAuthTokenGenerator {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        System.out.println("Response code from gen code..." + res.getStatusCode());
-        System.out.println("Response body from gen code..." + res.getBody().prettyPrint());
+//        System.out.println("Response code from gen code..." + res.getStatusCode());
+//        System.out.println("Response body from gen code..." + res.getBody().prettyPrint());
         System.out.println("Generated code..." + code);
+
         return code;
 
     }
