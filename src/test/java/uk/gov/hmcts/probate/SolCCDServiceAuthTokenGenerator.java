@@ -148,7 +148,7 @@ public class SolCCDServiceAuthTokenGenerator {
         String jsonResponse = given()
                 .header("Authorization", "Basic "+encoded)
                 .post(baseServiceOauth2Url + "/oauth2/authorize?response_type=code" +
-                        "&client_id=probate"+
+                        "&client_id=divorce"+
                         "&redirect_uri="+ redirectUri)
                 .asString();
 
@@ -161,5 +161,6 @@ public class SolCCDServiceAuthTokenGenerator {
         }
         System.out.println("Generated code..." + code);
         return code;
+
     }
 }
