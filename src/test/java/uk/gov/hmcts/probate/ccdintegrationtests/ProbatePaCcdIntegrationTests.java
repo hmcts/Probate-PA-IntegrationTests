@@ -20,11 +20,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void validatePostSuccessCCDCase() {
-        token =
-                SerenityRest.given()
-                        .headers(utils.getHeadersWithUserId())
-                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
-                        .then().assertThat().statusCode(200).extract().path("token");
+        generateEventToken();
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
@@ -39,11 +35,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void verifyJurisdictionInTheSuccessResponse() {
-        token =
-                SerenityRest.given()
-                        .headers(utils.getHeadersWithUserId())
-                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
-                        .then().assertThat().statusCode(200).extract().path("token");
+        generateEventToken();
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
@@ -56,13 +48,17 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
     }
 
-    @Test
-    public void verifyStateIsPresentInTheSuccessResponse() {
+    private void generateEventToken() {
         token =
                 SerenityRest.given()
                         .headers(utils.getHeadersWithUserId())
                         .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
                         .then().assertThat().statusCode(200).extract().path("token");
+    }
+
+    @Test
+    public void verifyStateIsPresentInTheSuccessResponse() {
+        generateEventToken();
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
@@ -77,11 +73,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void verifyCaseTypeIDPresentInTheSuccessResponse() {
-        token =
-                SerenityRest.given()
-                        .headers(utils.getHeadersWithUserId())
-                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
-                        .then().assertThat().statusCode(200).extract().path("token");
+        generateEventToken();
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
@@ -97,11 +89,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void verifySecurityClassificationIsPresentInTheSuccessResponse() {
-        token =
-                SerenityRest.given()
-                        .headers(utils.getHeadersWithUserId())
-                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
-                        .then().assertThat().statusCode(200).extract().path("token");
+        generateEventToken();
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
@@ -116,11 +104,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void verifyCreatedDateIsPresentInTheSuccessResponse() {
-        token =
-                SerenityRest.given()
-                        .headers(utils.getHeadersWithUserId())
-                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
-                        .then().assertThat().statusCode(200).extract().path("token");
+        generateEventToken();
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
@@ -134,11 +118,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void verifyLastModifiedIsPresentInTheSuccessResponse() {
-        token =
-                SerenityRest.given()
-                        .headers(utils.getHeadersWithUserId())
-                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
-                        .then().assertThat().statusCode(200).extract().path("token");
+        generateEventToken();
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
@@ -152,11 +132,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void verifyIdIsPresentInTheSuccessResponse() {
-        token =
-                SerenityRest.given()
-                        .headers(utils.getHeadersWithUserId())
-                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
-                        .then().assertThat().statusCode(200).extract().path("token");
+        generateEventToken();
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
@@ -171,11 +147,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void verifycaseDataIsPresentInTheSuccessResponse() {
-        token =
-                SerenityRest.given()
-                        .headers(utils.getHeadersWithUserId())
-                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
-                        .then().assertThat().statusCode(200).extract().path("token");
+        generateEventToken();
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
@@ -189,11 +161,7 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void verifyDataClassificationIsPresentInTheSuccessResponse() {
-        token =
-                SerenityRest.given()
-                        .headers(utils.getHeadersWithUserId())
-                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
-                        .then().assertThat().statusCode(200).extract().path("token");
+        generateEventToken();
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
@@ -208,20 +176,16 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
     @Test
     public void verifyDataWithWrongValue() {
-        token =
-                SerenityRest.given()
-                        .headers(utils.getHeadersWithUserId())
-                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
-                        .then().assertThat().statusCode(200).extract().path("token");
+        generateEventToken();
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
         String rep1 = rep.replace("\"deceasedForenames\": \"Suki\"", "\"deceasedForenames\":\"\"");
 
-     Response res=   SerenityRest.given()
+        Response res = SerenityRest.given()
                 .headers(utils.getHeadersWithUserId())
                 .body(rep1)
                 .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases");
-                System.out.println("Response body with wrong deceasedforename..." + res.getBody().prettyPrint());
+        System.out.println("Response body with wrong deceasedforename..." + res.getBody().prettyPrint());
     }
 
     @Test

@@ -94,22 +94,24 @@ public class SolCCDServiceAuthTokenGenerator {
 
 
     public String generateUserTokenWithNoRoles() {
-        createUserInIdam();
-        System.out.println("created user in idam");
-        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
-        final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
-                ? redirectUri
-                : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
-        final String token = RestAssured.given().baseUri(idamUserBaseUrl)
-                .header("Authorization", "Basic " + encoded)
-                .post("/oauth2/authorize?response_type=token&client_id=divorce&redirect_uri=" +
-                        redirectUriEnv)
-                .body()
-                .path("access-token");
-        System.out.println("token generated.." + token);
-
-        userToken = "Bearer " + token;
-        System.out.println("Usertoken generated..." + userToken);
+//        createUserInIdam();
+//        System.out.println("created user in idam");
+//        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
+//        final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
+//                ? redirectUri
+//                : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
+//        final String token = RestAssured.given().baseUri(idamUserBaseUrl)
+//                .header("Authorization", "Basic " + encoded)
+//                .post("/oauth2/authorize?response_type=token&client_id=divorce&redirect_uri=" +
+//                        redirectUriEnv)
+//                .body()
+//                .path("access-token");
+//        System.out.println("token generated.." + token);
+//
+//        userToken = "Bearer " + token;
+//        System.out.println("Usertoken generated..." + userToken);
+//        return userToken;
+        userToken=generateClientToken();
         return userToken;
     }
 
@@ -120,7 +122,7 @@ public class SolCCDServiceAuthTokenGenerator {
         String jsonResponse = post(baseServiceOauth2Url + "/oauth2/token?code=" + code +
                 "&client_secret=secret/test/ccidam/idam-api/oauth2/client-secrets/probate"+
                 "&client_id=probate"+
-                "&redirect_uri=https://www-test.probate.reform.hmcts.net"+
+                "&redirect_uri="+redirectUri+
                 "&grant_type=authorization_code")
                 .body().asString();
 
@@ -147,7 +149,7 @@ public class SolCCDServiceAuthTokenGenerator {
                 .header("Authorization", "Basic "+encoded)
                 .post(baseServiceOauth2Url + "/oauth2/authorize?response_type=code" +
                         "&client_id=probate"+
-                        "&redirect_uri=https://www-test.probate.reform.hmcts.net/oauth2/callback")
+                        "&redirect_uri="+ redirectUri)
                 .asString();
 
         ObjectMapper mapper = new ObjectMapper();
