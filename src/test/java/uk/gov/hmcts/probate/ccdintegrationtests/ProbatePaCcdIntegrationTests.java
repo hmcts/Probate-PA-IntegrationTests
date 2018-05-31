@@ -1,10 +1,14 @@
 package uk.gov.hmcts.probate.ccdintegrationtests;
 
+import io.restassured.response.Response;
+import net.serenitybdd.core.Serenity;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.gov.hmcts.probate.IntegrationTestBase;
+
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SerenityRunner.class)
 public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
@@ -22,11 +26,12 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
-        SerenityRest.given()
+      Response res = SerenityRest.given()
                 .headers(utils.getHeadersWithUserId())
                 .body(rep)
-                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
-                .then().assertThat().statusCode(201);
+                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases");
+     assertTrue(res.getStatusCode()==201);
+     System.out.println("Response body..." + res.getBody().prettyPrint());
     }
 
 

@@ -106,10 +106,58 @@ public class SolCCDServiceAuthTokenGenerator {
                         redirectUriEnv)
                 .body()
                 .path("access-token");
-        System.out.println("token generated.."+token);
+        System.out.println("token generated.." + token);
 
         userToken = "Bearer " + token;
         System.out.println("Usertoken generated..." + userToken);
         return userToken;
+    }
+
+    private String generateClientToken() {
+        String code = generateClientCode();
+        String token = "";
+
+        String jsonResponse = post(baseServiceOauth2Url + "/oauth2/token?code=" + code +
+                "&client_secret=secret/test/ccidam/idam-api/oauth2/client-secrets/probate"+
+                "&client_id=probate"+
+                "&redirect_uri=https://www-test.probate.reform.hmcts.net"+
+                "&grant_type=authorization_code")
+                .body().asString();
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            token = mapper.readValue(jsonResponse, ClientAuthorizationResponse.class).accessToken;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Generated user token...." + "Bearer "+token );
+
+        return "Bearer" +token;
+    }
+
+    private String generateClientCode() {
+        String code = "";
+        createUserInIdam();
+        System.out.println("created user in idam");
+        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
+        System.out.println("encoded auth is.." + encoded);
+        String jsonResponse = given()
+                .header("Authorization", "Basic "+encoded)
+                .post(baseServiceOauth2Url + "/oauth2/authorize?response_type=code" +
+                        "&client_id=probate"+
+                        "&redirect_uri=https://www-test.probate.reform.hmcts.net/oauth2/callback")
+                .asString();
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            code = mapper.readValue(jsonResponse, ClientAuthorizationCodeResponse.class).code;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Generated code..." + code);
+        return code;
     }
 }
