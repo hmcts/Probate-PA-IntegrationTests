@@ -214,11 +214,12 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
                         .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
                         .then().assertThat().statusCode(200).extract().path("token");
 
-        String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"deceasedForenames\": \"Suki\"", "\"deceasedForenames\":\"\"");
+        String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
+        String rep1 = rep.replace("\"deceasedForenames\": \"Suki\"", "\"deceasedForenames\":\"\"");
 
      Response res=   SerenityRest.given()
                 .headers(utils.getHeadersWithUserId())
-                .body(rep)
+                .body(rep1)
                 .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases");
                 System.out.println("Response body with wrong deceasedforename..." + res.getBody().prettyPrint());
     }
