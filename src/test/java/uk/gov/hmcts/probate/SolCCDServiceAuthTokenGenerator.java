@@ -85,10 +85,11 @@ public class SolCCDServiceAuthTokenGenerator {
 
         idamUsername = "simulate-delivered" + UUID.randomUUID() + "@notifications.service.gov.uk";
         idamPassword = "Test123456";
-        RestAssured.given()
+      Response res=  RestAssured.given()
                 .header("Content-Type", "application/json")
                 .body("{\"email\":\"" + idamUsername + "\", \"forename\":\"Test\",\"surname\":\"User\",\"password\":\"" + idamPassword + "\"}")
                 .post(idamCreateUrl());
+      System.out.println("User created response..." +res.getStatusCode());
         System.out.println("in create useridam ");
     }
 
@@ -148,7 +149,7 @@ public class SolCCDServiceAuthTokenGenerator {
         String jsonResponse = given()
                 .header("Authorization", "Basic "+encoded)
                 .post(idamUserBaseUrl + "/oauth2/authorize?response_type=code" +
-                        "&client_id=divorce"+
+                        "&client_id=probate"+
                         "&redirect_uri="+ redirectUri)
                 .asString();
 
