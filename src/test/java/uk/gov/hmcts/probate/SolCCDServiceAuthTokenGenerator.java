@@ -148,8 +148,7 @@ public class SolCCDServiceAuthTokenGenerator {
         System.out.println("encoded auth is.." + encoded);
        Response res= RestAssured.given().baseUri(idamUserBaseUrl)
                 .header("Authorization", "Basic " + encoded)
-                .post("/oauth2/authorize?response_type=code&client_id=divorce&redirect_uri=" +
-                        redirectUri);
+                .post("/oauth2/authorize?response_type=code&client_id=divorce&redirect_uri=https://ccd-case-management-web-saat.service.core-compute-saat.internal/oauth2redirect");
 
 //        String jsonResponse = given()
 //                .header("Authorization", "Bearer "+encoded)
