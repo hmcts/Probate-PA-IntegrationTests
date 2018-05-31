@@ -1,26 +1,15 @@
 package uk.gov.hmcts.probate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jwt.JWTParser;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.probate.model.ClientAuthorizationCodeResponse;
-import uk.gov.hmcts.probate.model.ClientAuthorizationResponse;
-import uk.gov.hmcts.probate.util.TestUtils;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.post;
 
 @Component
@@ -91,8 +80,6 @@ public class SolCCDServiceAuthTokenGenerator {
                 .header("Content-Type", "application/json")
                 .body("{\"email\":\"" + idamUsername + "\", \"forename\":\"Test\",\"surname\":\"User\",\"password\":\"" + idamPassword + "\"}")
                 .post(idamCreateUrl());
-        System.out.println("User created response..." + res.getStatusCode());
-        System.out.println("in create useridam ");
     }
 
 
@@ -125,8 +112,6 @@ public class SolCCDServiceAuthTokenGenerator {
                 .header("Authorization", "Basic " + encoded)
                 .post("/oauth2/authorize?response_type=code&client_id=probate&redirect_uri=" + redirectUri)
                 .body().path("code");
-        System.out.println("Generated code..." + code);
-
         return code;
 
     }
