@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.gov.hmcts.probate.IntegrationTestBase;
 
+import static org.hamcrest.Matchers.equalToIgnoringCase;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SerenityRunner.class)
@@ -26,12 +28,70 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
 
         String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
 
-      Response res = SerenityRest.given()
+        Response res = SerenityRest.given()
                 .headers(utils.getHeadersWithUserId())
                 .body(rep)
                 .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases");
-     assertTrue(res.getStatusCode()==201);
-     System.out.println("Response body..." + res.getBody().prettyPrint());
+        assertTrue(res.getStatusCode() == 201);
+        System.out.println("Response body..." + res.getBody().prettyPrint());
+    }
+
+
+    @Test
+    public void verifyJurisdictionInTheSuccessResponse() {
+        token =
+                SerenityRest.given()
+                        .headers(utils.getHeadersWithUserId())
+                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
+                        .then().assertThat().statusCode(200).extract().path("token");
+
+        String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
+
+        SerenityRest.given()
+                .headers(utils.getHeadersWithUserId())
+                .body(rep)
+                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+                .then()
+                .statusCode(201).and().body("jurisdiction", equalToIgnoringCase("PROBATE"));
+
+    }
+
+    @Test
+    public void verifyStateIsPresentInTheSuccessResponse() {
+        token =
+                SerenityRest.given()
+                        .headers(utils.getHeadersWithUserId())
+                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
+                        .then().assertThat().statusCode(200).extract().path("token");
+
+        String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
+
+        SerenityRest.given()
+                .headers(utils.getHeadersWithUserId())
+                .body(rep)
+                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+                .then()
+                .statusCode(201).and().body("state",equalToIgnoringCase("CaseCreated"));
+
+    }
+
+    @Test
+    public void verifyCaseTypeIDPresentInTheSuccessResponse() {
+        token =
+                SerenityRest.given()
+                        .headers(utils.getHeadersWithUserId())
+                        .when().get("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/event-triggers/applyForGrant/token")
+                        .then().assertThat().statusCode(200).extract().path("token");
+
+        String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
+
+        SerenityRest.given()
+                .headers(utils.getHeadersWithUserId())
+                .body(rep)
+                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases")
+                .then()
+                .statusCode(201).and().body("case_type_id",equalToIgnoringCase("GrantOfRepresentation"));
+
     }
 
 
