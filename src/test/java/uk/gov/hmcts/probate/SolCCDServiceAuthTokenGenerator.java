@@ -119,7 +119,7 @@ public class SolCCDServiceAuthTokenGenerator {
         String code = generateClientCode();
         String token = "";
 
-        String jsonResponse = post(baseServiceOauth2Url + "/oauth2/token?code=" + code +
+        String jsonResponse = post(idamUserBaseUrl + "/oauth2/token?code=" + code +
                 "&client_secret=secret/test/ccidam/idam-api/oauth2/client-secrets/probate"+
                 "&client_id=probate"+
                 "&redirect_uri="+redirectUri+
@@ -147,7 +147,7 @@ public class SolCCDServiceAuthTokenGenerator {
         System.out.println("encoded auth is.." + encoded);
         String jsonResponse = given()
                 .header("Authorization", "Basic "+encoded)
-                .post(baseServiceOauth2Url + "/oauth2/authorize?response_type=code" +
+                .post(idamUserBaseUrl + "/oauth2/authorize?response_type=code" +
                         "&client_id=divorce"+
                         "&redirect_uri="+ redirectUri)
                 .asString();
