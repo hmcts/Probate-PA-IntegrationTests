@@ -146,20 +146,27 @@ public class SolCCDServiceAuthTokenGenerator {
         System.out.println("created user in idam");
         final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
         System.out.println("encoded auth is.." + encoded);
-        String jsonResponse = given()
-                .header("Authorization", "Basic "+encoded)
-                .post(idamUserBaseUrl + "/oauth2/authorize?response_type=code" +
-                        "&client_id=probate"+
-                        "&redirect_uri="+ redirectUri)
-                .asString();
+       Response res= RestAssured.given().baseUri(idamUserBaseUrl)
+                .header("Authorization", "Basic " + encoded)
+                .post("/oauth2/authorize?response_type=code&client_id=divorce&redirect_uri=" +
+                        redirectUri);
 
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            code = mapper.readValue(jsonResponse, ClientAuthorizationCodeResponse.class).code;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        String jsonResponse = given()
+//                .header("Authorization", "Bearer "+encoded)
+//                .post(idamUserBaseUrl + "/oauth2/authorize?response_type=code" +
+//                        "&client_id=probate"+
+//                        "&redirect_uri="+ redirectUri)
+//                .asString();
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//
+//        try {
+//            code = mapper.readValue(jsonResponse, ClientAuthorizationCodeResponse.class).code;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        System.out.println("Response code from gen code..." + res.getStatusCode());
+        System.out.println("Response body from gen code..." + res.getBody().prettyPrint());
         System.out.println("Generated code..." + code);
         return code;
 
