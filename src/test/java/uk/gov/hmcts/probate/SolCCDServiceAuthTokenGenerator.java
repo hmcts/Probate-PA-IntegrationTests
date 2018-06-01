@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
+
 import static io.restassured.RestAssured.post;
 
 @Component
@@ -84,10 +85,27 @@ public class SolCCDServiceAuthTokenGenerator {
 
 
     public String generateUserTokenWithNoRoles() {
-        userToken = generateClientToken();
+        createUserInIdam();
+        System.out.println("created user in idam");
+        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
+        final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
+                ? redirectUri
+                : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
+        final String token = RestAssured.given().baseUri(idamUserBaseUrl)
+                .header("Authorization", "Basic " + encoded)
+                .post("/oauth2/authorize?response_type=token&client_id=divorce&redirect_uri=" +
+                        redirectUriEnv)
+                .body()
+                .path("access-token");
+        System.out.println("token generated.." + token);
+
+        userToken = "Bearer " + token;
+        System.out.println("Usertoken generated..." + userToken);
         return userToken;
     }
 
+
+    //keeping this code to see if we need this mechnasim after sidam integration.
     private String generateClientToken() {
         String code = generateClientCode();
         String token = "";
