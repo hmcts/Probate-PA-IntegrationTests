@@ -91,17 +91,14 @@ public class SolCCDServiceAuthTokenGenerator {
         final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
                 ? redirectUri
                 : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
-        Response res1 = RestAssured.given().baseUri(idamUserBaseUrl)
+        final String token = RestAssured.given().baseUri(idamUserBaseUrl)
                 .header("Authorization", "Basic " + encoded)
                 .post("/oauth2/authorize?response_type=token&client_id=probate&redirect_uri=" +
-                        redirectUriEnv);
-//                .body()
-//                .path("access-token");
-//        System.out.println("token generated.." + token);
-//
-//        userToken = "Bearer " + token;
-        System.out.println("Usertoken generated status code..." + res1.getStatusCode());
-        System.out.println("Usertoken generated body ..." + res1.getBody().prettyPrint());
+                        redirectUriEnv)
+                .body()
+                .path("access-token");
+        System.out.println("token generated.." + token);
+        userToken = "Bearer " + token;
         return userToken;
     }
 
