@@ -165,21 +165,6 @@ public class ProbatePaCcdIntegrationTests extends IntegrationTestBase {
                 .statusCode(201).and().extract().body().asString().contains("data_classification");
     }
 
-
-    @Test
-    public void verifyDataWithWrongValue() {
-        generateEventToken();
-
-        String rep = utils.getJsonFromFile("success.pa.ccd.json").replace("\"event_token\": \"sampletoken\"", "\"event_token\":\"" + token + "\"");
-        String rep1 = rep.replace("\"deceasedForenames\": \"Suki\"", "\"deceasedForenames\":\"\"");
-
-        Response res = SerenityRest.given()
-                .headers(utils.getHeadersWithUserId())
-                .body(rep1)
-                .when().post("/citizens/" + utils.getUserId() + "/jurisdictions/PROBATE/case-types/GrantOfRepresentation/cases");
-        System.out.println("Response body with wrong deceasedforename..." + res.getBody().prettyPrint());
-    }
-
     @Test
     public void validateFailureWithInvalidCCDCasePayload() {
 
