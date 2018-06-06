@@ -19,7 +19,7 @@ properties(
                                                       string(description: 'Idam user auth url', defaultValue: 'http://idam-api-idam-saat.service.core-compute-idam-saat.internal', name: 'USER_AUTH_PROVIDER_OAUTH2_URL'),
                                                       string(description: 'Idam redirect url', defaultValue: 'https://www-test.probate.reform.hmcts.net/oauth2/callback', name: 'IDAM_OAUTH2_REDIRECT_URI'),
                                                        string(description: 'env', defaultValue: 'saat', name: 'ENV'),
-                                                       string(description: 'Idam.secret', defaultValue: 'abc', name: 'IDAM_SECRET')
+                                                       string(description: 'Idam.secret', defaultValue: 'abc', name: 'IDAM_SECRET'),
                                                        string(description: 's2s.auth.totp.secret', defaultValue: 'abc', name: 'S2S_AUTH_TOTP_SECRET')
 
                                               ])
