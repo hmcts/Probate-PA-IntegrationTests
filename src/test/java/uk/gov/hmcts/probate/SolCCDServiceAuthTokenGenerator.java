@@ -1,10 +1,13 @@
 package uk.gov.hmcts.probate;
 
-import com.nimbusds.jwt.JWTParser;
+//import com.nimbusds.jwt.JWTParser;
+
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import uk.gov.hmcts.reform.authorisation.generators.ServiceAuthTokenGenerator;
 
 import java.text.ParseException;
 import java.util.Base64;
@@ -41,7 +44,7 @@ public class SolCCDServiceAuthTokenGenerator {
     @Value("${env}")
     private String environment;
 
-    @Value("${secret}")
+    @Value("${idam.secret}")
     private String secret;
 
     @Value("${user.auth.provider.oauth2.url}")
@@ -54,22 +57,31 @@ public class SolCCDServiceAuthTokenGenerator {
         return idamUserBaseUrl + "/testing-support/accounts";
     }
 
+    @Autowired
+    private ServiceAuthTokenGenerator tokenGenerator;
+
     public String generateServiceToken() {
-        return "Bearer " + post(baseServiceAuthUrl + "/testing-support/lease?microservice={microservice}", serviceName)
-                .body().asString();
+        return tokenGenerator.generate();
     }
 
     public String getUserId() {
-        String jwt = userToken.replaceFirst("Bearer ", "");
-        Map<String, Object> claims;
-        try {
-            claims = JWTParser.parse(jwt).getJWTClaimsSet().getClaims();
-        } catch (ParseException e) {
-            throw new IllegalStateException("Cannot find user from authorization token ", e);
-        }
-        String userid_local = (String) claims.get("id");
-        return userid_local;
+//        String jwt = userToken.replaceFirst("Bearer ", "");
+//        Map<String, Object> claims;
+//        try {
+//            claims = JWTParser.parse(jwt).getJWTClaimsSet().getClaims();
+//        } catch (ParseException e) {
+//            throw new IllegalStateException("Cannot find user from authorization token ", e);
+//        }
+//        String userid_local = (String) claims.get("id");
+//        return userid_local;
 
+        String userid_local = RestAssured.given()
+                .header("Authorization", userToken)
+                .get(idamUserBaseUrl + "/details")
+                .body()
+                .path("id");
+        System.out.println("userid generated.." + userid_local);
+        return userid_local;
     }
 
 
@@ -86,24 +98,26 @@ public class SolCCDServiceAuthTokenGenerator {
 
     public String generateUserTokenWithNoRoles() {
         createUserInIdam();
-        System.out.println("created user in idam");
-        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
-        final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
-                ? redirectUri
-                : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
-        final String token = RestAssured.given().baseUri(idamUserBaseUrl)
-                .header("Authorization", "Basic " + encoded)
-                .post("/oauth2/authorize?response_type=token&client_id=probate&redirect_uri=" +
-                        redirectUriEnv)
-                .body()
-                .path("access-token");
+//        System.out.println("created user in idam");
+//        final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
+//        final String redirectUriEnv = environment.equalsIgnoreCase("saat") == true
+//                ? redirectUri
+//                : "https://www.preprod.ccd.reform.hmcts.net/oauth2redirect";
+//        final String token = RestAssured.given().baseUri(idamUserBaseUrl)
+//                .header("Authorization", "Basic " + encoded)
+//                .post("/oauth2/authorize?response_type=token&client_id=probate&redirect_uri=" +
+//                        redirectUriEnv)
+//                .body()
+//                .path("access-token");
+
+        final String token = generateClientToken();
         System.out.println("token generated.." + token);
-        userToken = "Bearer " + token;
+       // userToken = "Bearer " + token;
         return userToken;
     }
 
 
-    //keeping this code to see if we need this mechnasim after sidam integration.
+    //keeping this code to see if we need this mechanism after sidam integration.
     private String generateClientToken() {
         String code = generateClientCode();
         String token = "";
