@@ -26,7 +26,7 @@ repositories {
     jcenter()
 }
 
-def springBootVersion = '1.5.6.RELEASE'
+def springBootVersion = '1.5.13.RELEASE'
 apply plugin: 'java'
 apply plugin: 'net.serenity-bdd.aggregator'
 
@@ -62,9 +62,14 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.7'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springBootVersion
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: springBootVersion
+    compile group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springBootVersion
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
     compile group: 'org.pdfbox', name: 'com.springsource.org.pdfbox', version: '0.7.3'
+    compile group: 'org.springframework.security', name: 'spring-security-test', version: '4.2.5.RELEASE'
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.0'
     compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '0.6.0'
+    
 }
 
 jar {
