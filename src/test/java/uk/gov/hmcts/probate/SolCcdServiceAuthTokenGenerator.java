@@ -11,7 +11,7 @@ import java.util.Base64;
 import java.util.UUID;
 
 @Component
-public class SolCCDServiceAuthTokenGenerator {
+public class SolCcdServiceAuthTokenGenerator {
 
     @Value("${idam.oauth2.client.id}")
     private String clientId;

@@ -15,7 +15,7 @@ import uk.gov.hmcts.probate.util.TestUtils;
 public abstract class IntegrationTestBase {
 
     @Autowired
-    protected SolCCDServiceAuthTokenGenerator serviceAuthTokenGenerator;
+    protected SolCcdServiceAuthTokenGenerator solCcdServiceAuthTokenGenerator;
 
     @Autowired
     protected TestUtils utils;

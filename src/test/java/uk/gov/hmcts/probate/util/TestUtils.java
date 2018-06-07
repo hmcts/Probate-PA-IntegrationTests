@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.ResourceUtils;
-import uk.gov.hmcts.probate.SolCCDServiceAuthTokenGenerator;
+import uk.gov.hmcts.probate.SolCcdServiceAuthTokenGenerator;
 import uk.gov.hmcts.probate.TestContextConfiguration;
 
 import javax.annotation.PostConstruct;
@@ -21,14 +21,14 @@ import java.nio.file.Files;
 public class TestUtils {
 
     @Autowired
-    protected SolCCDServiceAuthTokenGenerator serviceAuthTokenGenerator;
+    protected SolCcdServiceAuthTokenGenerator solCcdServiceAuthTokenGenerator;
 
     private String serviceToken;
 
 
     @PostConstruct
     public void init() {
-        serviceToken = serviceAuthTokenGenerator.generateServiceToken();
+        serviceToken = solCcdServiceAuthTokenGenerator.generateServiceToken();
     }
 
     public String getJsonFromFile(String fileName) {
@@ -60,13 +60,13 @@ public class TestUtils {
         return Headers.headers(
                 new Header("ServiceAuthorization", serviceToken),
                 new Header("Content-Type", ContentType.JSON.toString()),
-                new Header("Authorization", serviceAuthTokenGenerator.generateUserTokenWithNoRoles()));
+                new Header("Authorization", solCcdServiceAuthTokenGenerator.generateUserTokenWithNoRoles()));
 
 
     }
 
     public String getUserId() {
-        return serviceAuthTokenGenerator.getUserId();
+        return solCcdServiceAuthTokenGenerator.getUserId();
     }
 
 
