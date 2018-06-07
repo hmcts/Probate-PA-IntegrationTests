@@ -1,6 +1,7 @@
 package uk.gov.hmcts.probate;
 
 import io.restassured.RestAssured;
+import io.restassured.parsing.Parser;
 import net.thucydides.junit.spring.SpringIntegration;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
@@ -26,6 +27,7 @@ public abstract class IntegrationTestBase {
     public void solCcdServiceUrl(@Value("${ccd.data.store.api.url}") String solCcdServiceUrl) {
         this.solCcdServiceUrl = solCcdServiceUrl;
         RestAssured.baseURI = solCcdServiceUrl;
+        RestAssured.defaultParser = Parser.JSON;
     }
 
 
