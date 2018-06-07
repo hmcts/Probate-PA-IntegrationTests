@@ -70,7 +70,6 @@ dependencies {
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.0'
     compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '0.6.0'
     compile group: 'uk.gov.hmcts.auth.totp', name: 'totp', version: '1.0.1'
-    compile sourceSets.test.runtimeClasspath
 
 }
 
