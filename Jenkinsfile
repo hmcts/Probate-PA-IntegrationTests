@@ -16,11 +16,13 @@ properties(
                                               parameters([
                                                       string(description: 'CCD Data Store Api url', defaultValue: 'http://ccd-data-store-api-saat.service.core-compute-saat.internal/', name: 'CCD_DATA_STORE_API_URL'),
                                                       string(description: 'Service auth url', defaultValue: 'http://rpe-service-auth-provider-saat.service.core-compute-saat.internal', name: 'SERVICE_AUTH_PROVIDER_BASE_URL'),
-                                                      string(description: 'Idam user auth url', defaultValue: 'http://idam-api-idam-saat.service.core-compute-idam-saat.internal', name: 'USER_AUTH_PROVIDER_OAUTH2_URL'),
-                                                      string(description: 'Idam redirect url', defaultValue: 'https://www-test.probate.reform.hmcts.net/oauth2/callback', name: 'IDAM_OAUTH2_REDIRECT_URI'),
-                                                       string(description: 'env', defaultValue: 'saat', name: 'ENV'),
-                                                       string(description: 'Idam.secret', defaultValue: 'abc', name: 'IDAM_SECRET'),
-                                                       string(description: 's2s.auth.totp.secret', defaultValue: 'abc', name: 'S2S_AUTH_TOTP_SECRET')
+                                                      string(description: 'IDAM user auth url', defaultValue: 'http://idam-api-idam-saat.service.core-compute-idam-saat.internal', name: 'USER_AUTH_PROVIDER_OAUTH2_URL'),
+                                                      string(description: 'IDAM redirect url', defaultValue: 'https://www-test.probate.reform.hmcts.net/oauth2/callback', name: 'IDAM_OAUTH2_REDIRECT_URI'),
+                                                      string(description: 'env', defaultValue: 'saat', name: 'ENV'),
+                                                      string(description: 'IDAM Secret', defaultValue: 'abc', name: 'IDAM_SECRET'),
+                                                      string(description: 'S2S Auth Totp Secret', defaultValue: 'abc', name: 'S2S_AUTH_TOTP_SECRET'),
+                                                      string(description: 'IDAM User name', defaultValue: 'testuser', name: 'IDAM_USERNAME'),
+                                                      string(description: 'IDAM Password', defaultValue: 'testpassword', name: 'IDAM_PASSWORD')
 
                                               ])
 
