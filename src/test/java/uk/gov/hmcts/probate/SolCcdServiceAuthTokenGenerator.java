@@ -71,15 +71,17 @@ public class SolCcdServiceAuthTokenGenerator {
 
     private void createUserInIdam() {
 
-        idamUsername = "simulate-delivered" + UUID.randomUUID() + "@notifications.service.gov.uk";
-        idamPassword = "Test123456";
-        System.out.println("idam user create url.." +idamCreateUrl());
-        Response res = RestAssured.given()
-                .header("Content-Type", "application/json")
-                .body("{\"email\":\"" + idamUsername + "\", \"forename\":\"Test\",\"surname\":\"User\",\"password\":\"" + idamPassword + "\"}")
-                .post(idamCreateUrl());
+//        idamUsername = "simulate-delivered" + UUID.randomUUID() + "@notifications.service.gov.uk";
+//        idamPassword = "Test123456";
+//        System.out.println("idam user create url.." +idamCreateUrl());
+//        Response res = RestAssured.given()
+//                .header("Content-Type", "application/json")
+//                .body("{\"email\":\"" + idamUsername + "\", \"forename\":\"Test\",\"surname\":\"User\",\"password\":\"" + idamPassword + "\",}")
+//                .post(idamCreateUrl());
+        idamUsername = "venu7jun1@mailinator.com";
+        idamPassword = "Monday01";
 
-        System.out.println("user created status..." + res.getStatusCode());
+        //System.out.println("user created status..." + res.getStatusCode());
     }
 
 
