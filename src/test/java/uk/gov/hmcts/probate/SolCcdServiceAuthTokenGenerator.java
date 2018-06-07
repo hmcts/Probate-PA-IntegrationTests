@@ -110,9 +110,9 @@ public class SolCcdServiceAuthTokenGenerator {
     private String generateClientCode() {
         String code = "";
         createUserInIdam();
-        System.out.println("created user in idam");
+        //System.out.println("created user in idam");
         final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
-        System.out.println("encoded auth is.." + encoded);
+       // System.out.println("encoded auth is.." + encoded);
         System.out.println("redirect uri" + redirectUri);
         Response r1 = RestAssured.given().baseUri(idamUserBaseUrl)
                 .header("Authorization", "Basic " + encoded)
