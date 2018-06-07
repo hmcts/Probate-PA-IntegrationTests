@@ -77,13 +77,15 @@ public class SolCcdServiceAuthTokenGenerator {
                 .header("Content-Type", "application/json")
                 .body("{\"email\":\"" + idamUsername + "\", \"forename\":\"Test\",\"surname\":\"User\",\"password\":\"" + idamPassword + "\"}")
                 .post(idamCreateUrl());
+
+        System.out.println("user created status..." + res.getStatusCode());
     }
 
 
     public String generateUserTokenWithNoRoles() {
         createUserInIdam();
-        final String token = generateClientToken();
-        System.out.println("token generated.." + token);
+        userToken= generateClientToken();
+        System.out.println("token generated.." + userToken);
         return userToken;
     }
 
@@ -93,12 +95,14 @@ public class SolCcdServiceAuthTokenGenerator {
         String code = generateClientCode();
         String token = "";
 
-        token = RestAssured.given().post(idamUserBaseUrl + "/oauth2/token?code=" + code +
+        Response res1 = RestAssured.given().post(idamUserBaseUrl + "/oauth2/token?code=" + code +
                 "&client_secret=" + secret +
                 "&client_id=probate" +
                 "&redirect_uri=" + redirectUri +
-                "&grant_type=authorization_code")
-                .body().path("access_token");
+                "&grant_type=authorization_code");
+        System.out.println("status code in client token generation..." + res1.getStatusCode());
+        System.out.println("response body of client token generation..." + res1.getBody().prettyPrint());
+              //  .body().path("access_token");
 
         return "Bearer " + token;
     }
@@ -113,6 +117,7 @@ public class SolCcdServiceAuthTokenGenerator {
                 .header("Authorization", "Basic " + encoded)
                 .post("/oauth2/authorize?response_type=code&client_id=probate&redirect_uri=" + redirectUri)
                 .body().path("code");
+        System.out.println("code generated in gernerateClientCode..." + code);
         return code;
 
     }
