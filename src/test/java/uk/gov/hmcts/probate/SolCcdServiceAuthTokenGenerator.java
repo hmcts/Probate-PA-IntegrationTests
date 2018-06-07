@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.authorisation.generators.ServiceAuthTokenGenerator;
+
 import java.util.Base64;
 import java.util.UUID;
 
@@ -87,7 +88,7 @@ public class SolCcdServiceAuthTokenGenerator {
 
     public String generateUserTokenWithNoRoles() {
         createUserInIdam();
-        userToken= generateClientToken();
+        userToken = generateClientToken();
         System.out.println("token generated.." + userToken);
         return userToken;
     }
@@ -98,14 +99,12 @@ public class SolCcdServiceAuthTokenGenerator {
         String code = generateClientCode();
         String token = "";
 
-        Response res1 = RestAssured.given().post(idamUserBaseUrl + "/oauth2/token?code=" + code +
+        token = RestAssured.given().post(idamUserBaseUrl + "/oauth2/token?code=" + code +
                 "&client_secret=" + secret +
                 "&client_id=probate" +
                 "&redirect_uri=" + redirectUri +
-                "&grant_type=authorization_code");
-        System.out.println("status code in client token generation..." + res1.getStatusCode());
-        System.out.println("response body of client token generation..." + res1.getBody().prettyPrint());
-              //  .body().path("access_token");
+                "&grant_type=authorization_code")
+                .body().path("access_token");
 
         return "Bearer " + token;
     }
@@ -113,17 +112,11 @@ public class SolCcdServiceAuthTokenGenerator {
     private String generateClientCode() {
         String code = "";
         createUserInIdam();
-        //System.out.println("created user in idam");
         final String encoded = Base64.getEncoder().encodeToString((idamUsername + ":" + idamPassword).getBytes());
-       // System.out.println("encoded auth is.." + encoded);
-        System.out.println("redirect uri" + redirectUri);
-        Response r1 = RestAssured.given().baseUri(idamUserBaseUrl)
+        code = RestAssured.given().baseUri(idamUserBaseUrl)
                 .header("Authorization", "Basic " + encoded)
-                .post("/oauth2/authorize?response_type=code&client_id=probate&redirect_uri=" + redirectUri);
-                //.body().path("code");
-        System.out.println("redirect uri" + redirectUri);
-        System.out.println("code generated in statuscode..." + r1.getStatusCode());
-        System.out.println("code generated in body..." + r1.getBody().prettyPrint());
+                .post("/oauth2/authorize?response_type=code&client_id=probate&redirect_uri=" + redirectUri)
+                .body().path("code");
         return code;
 
     }
